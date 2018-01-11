@@ -1,14 +1,34 @@
-// create a particular subscriber by name
-const createSubscriber = (z, bundle) => {
-  const responsePromise = z.request({
+const createSubscriberAction = (z, bundle) => {
+  //business logic
+  //creat subscriber
+  //create 2 slots
+  //create subscription
+};
+
+
+let createSubscriber = function(z, bundle) {
+
+  const subscriberPromise = z.request({
     method: 'POST',
     url: 'https://jsonplaceholder.typicode.com/posts',
     body: JSON.stringify({
       name: bundle.inputData.name
     })
   });
-  return responsePromise
+
+
+
+  return subscriberPromise
     .then(response => z.JSON.parse(response.content));
+
+};
+
+let activateSubscription = function(z, bundle) {
+
+};
+
+let addSlot = function(z, bundle) {
+
 };
 
 module.exports = {
@@ -22,18 +42,9 @@ module.exports = {
 
   operation: {
     inputFields: [
-      {key: 'name', required: true}
+      { key: 'name', required: true },
+      {key:'package', required:true, dynamic:'path here'}
     ],
-    perform: createSubscriber,
-
-    sample: {
-      id: 1,
-      name: 'Test'
-    },
-
-    outputFields: [
-      {key: 'id', label: 'ID'},
-      {key: 'name', label: 'Name'}
-    ]
+    perform: createSubscriberAction
   }
 };

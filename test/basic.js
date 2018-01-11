@@ -6,35 +6,34 @@ const App = require('../index');
 const appTester = zapier.createAppTester(App);
 
 describe('session auth app', () => {
+  let sessionKey;
   it('has an exchange for username/password', (done) => {
-    // Try changing the values of username or password to see how the test method behaves
     const bundle = {
       authData: {
-        username: 'bryan',
-        password: 'hunter2'
+        username: 'extotheizzle@gmail.com',
+        password: 'E=mcsquared0'
       }
     };
 
     appTester(App.authentication.sessionConfig.perform, bundle)
       .then((newAuthData) => {
-        newAuthData.sessionKey.should.eql('new session key!');
+        sessionKey = newAuthData.sessionKey;
+        newAuthData.sessionKey.should.exist;
         done();
       })
       .catch(done);
   });
 
-  it('has auth details added to every request', (done) => {
-    // Try changing the values of username or password to see how the test method behaves
+  it('auth should be valid', (done) => {
     const bundle = {
       authData: {
-        sessionKey: 'my session key'
+        sessionKey: sessionKey
       }
     };
 
     appTester(App.authentication.test, bundle)
       .then((response) => {
         response.status.should.eql(200);
-        response.request.headers['X-Session-Key'].should.eql('my session key');
         done();
       })
       .catch(done);
