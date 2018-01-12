@@ -1,3 +1,6 @@
+const LanguagesTrigger = require('./triggers/language');
+const TimezoneTrigger = require('./triggers/time_zone');
+const CountryTrigger = require('./triggers/country');
 const getPackage = require('./triggers/package');
 const createSubscriber = require('./creates/subscriber');
 const authentication = require('./authentication');
@@ -5,7 +8,8 @@ const authentication = require('./authentication');
 const includeSessionKeyHeader = (request, z, bundle) => {
   if (bundle.authData.sessionKey) {
     request.headers = request.headers || {};
-    request.headers['Cookie'] = `JESSIONID=${bundle.authData.sessionKey}`
+    request.headers.cookie = `XSRF-TOKEN=${bundle.authData.token}; JSESSIONID=${bundle.authData.sessionKey}`;
+    request.headers['X-XSRF-TOKEN'] = bundle.authData.token;
   }
   return request;
 };
@@ -37,6 +41,9 @@ const App = {
   },
 
   triggers: {
+    [LanguagesTrigger.key]: LanguagesTrigger,
+    [TimezoneTrigger.key]: TimezoneTrigger,
+    [CountryTrigger.key]: CountryTrigger,
     [getPackage.key]: getPackage,
   },
 
